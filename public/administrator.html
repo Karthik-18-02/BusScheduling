@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administrator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="role-container" id="administrator-page">
+      <h2 class="role-header">Administrator - Add New User</h2>
+      <div class="form-group">
+        <label for="newName">Name</label>
+        <input type="text" id="newName" />
+      </div>
+      <div class="form-group">
+        <label for="newLoginId">Login ID</label>
+        <input type="text" id="newLoginId" />
+      </div>
+      <div class="form-group">
+        <label for="newPassword">Password</label>
+        <input type="password" id="newPassword" />
+      </div>
+      <div class="form-group">
+        <label for="newRole">Role</label>
+        <select id="newRole">
+          <option value="bus-scheduler">Bus Scheduler</option>
+          <option value="crew">Crew</option>
+          <option value="administrator">Administrator</option>
+          <option value="route-planner">Route Planner</option>
+          <option value="passenger">Passenger</option>
+        </select>
+      </div>
+      <button onclick="addUser()">Add User</button>
+      <button id="showUsersButton">Show Current Users</button>
+      <div class="user-list">
+        <h3 id="currentUsersHeading" style="display: none">Current Users</h3>
+        <ul id="userList">
+          <!-- Users will be dynamically added here -->
+        </ul>
+      </div>
+    </div>
+
+    <script src="administrator.js"></script>
+  </body>
+</html>

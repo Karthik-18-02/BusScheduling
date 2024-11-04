@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apply Leave</title>
+  <link rel="stylesheet" href="style.css"> <!-- Assuming this links to your main stylesheet -->
+</head>
+<body>
+
+  <div class="role-container">
+    <h1>Apply for Leave</h1>
+
+    <!-- Date input for selecting the leave date -->
+    <div class="form-group">
+      <label for="leaveDate">Leave Date:</label>
+      <input type="date" id="leaveDate" name="leaveDate" required class="input-field">
+    </div>
+
+    <form id="leaveApplicationForm" class="form">
+      <div class="form-group">
+        <label for="breakFrom">Break Timing From:</label>
+        <input type="time" id="breakFrom" name="breakFrom" required class="input-field">
+      </div>
+
+      <div class="form-group">
+        <label for="breakTo">Break Timing To:</label>
+        <input type="time" id="breakTo" name="breakTo" required class="input-field">
+      </div>
+
+      <div class="form-group">
+        <label for="leaveReason">Leave Reason:</label>
+        <textarea id="leaveReason" name="leaveReason" rows="4" placeholder="Enter the reason for your leave" required class="input-field"></textarea>
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit Leave Application</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Handle form submission
+    document.getElementById("leaveApplicationForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      
+      const leaveDate = document.getElementById("leaveDate").value;
+      const breakFrom = document.getElementById("breakFrom").value;
+      const breakTo = document.getElementById("breakTo").value;
+      const leaveReason = document.getElementById("leaveReason").value;
+      
+      // You can process the form data here or send it to the server
+      alert("Leave application submitted successfully! \n" +
+            "Date: " + leaveDate + "\n" +
+            "From: " + breakFrom + "\n" +
+            "To: " + breakTo + "\n" +
+            "Reason: " + leaveReason);
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Automated Bus Scheduling and Route Management System</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Home Page -->
+    <div class="role-container" id="home-page">
+      <h1>Automated Bus Scheduling and Route Management System</h1>
+      <p>
+        Welcome to the Automated Bus Scheduling and Route Management System for the Delhi Transport Corporation. This system helps streamline the scheduling of buses and route management, making public transport more efficient.
+      </p>
+      <h2>Problem Statement:</h2>
+      <p>
+        Managing and scheduling buses across various routes is a challenging task, especially in a city like Delhi. This system is designed to automate the process of assigning buses and crew members to different routes based on various factors such as availability, time, and routes.
+      </p>
+      <button onclick="navigateToLogin()">Login</button>
+    </div>
+
+    <!-- Login Page -->
+    <div class="role-container" id="login-container" style="display:none;">
+      <h2>Login</h2>
+      <div class="form-group">
+        <div class="form-group">
+          <label for="newLoginId">Login ID</label>
+          <input type="text" id="newLoginId" />
+        </div>
+        <div class="form-group">
+          <label for="newPassword">Password</label>
+          <input type="password" id="newPassword" />
+        </div>
+        <label for="role">Role</label>
+        <select id="role" name="role">
+          <option value="administrator.html">Administrator</option>
+          <option value="bus_scheduler.html">Bus Scheduler</option>
+          <option value="crew.html">Crew</option>
+          <option value="route_planner.html">Route Planner</option>
+          <option value="passenger.html">Passenger</option>
+        </select>
+      </div>
+      <button onclick="login()">Login</button><br><br>
+      <button onclick="navigateToHome()">Back to Home</button>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

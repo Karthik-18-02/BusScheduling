@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crew Module</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css"> <!-- Assuming this is your main stylesheet -->
+  <style>
+    #map {
+      height: 500px;
+      width: 100%;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Similar to other elements */
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .btn {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    label {
+      font-size: 14px;
+      color: #555;
+      font-family: Arial, sans-serif;
+      display: block;
+      margin-bottom: 5px;
+    }
+    span {
+      font-size: 14px;
+      color: #333;
+      font-family: Arial, sans-serif;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    ul li {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="role-container">
+    <h1>Crew</h1>
+
+    <div class="form-group">
+      <label for="busRouteDropdown">Select Assigned Bus Route:</label>
+      <select id="busRouteDropdown" class="input-field">
+        <!-- Options will be dynamically added here -->
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Assigned Start Point: <span id="assignedStartPoint">Depot A</span></label>
+    </div>
+
+    <div class="form-group">
+      <label>Assigned Destination Point: <span id="assignedDestinationPoint">Depot B</span></label>
+    </div>
+
+    <!-- Bus Stop Points List -->
+    <div class="form-group">
+      <label>Stop Points List:</label>
+      <ul id="stopPointsList">
+        <!-- Bus stops will be dynamically added here -->
+      </ul>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="form-group">
+      <button id="applyLeaveButton" class="btn">Apply Leave</button>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="crew.js"></script> <!-- External JS file for map and logic -->
+
+</body>
+</html>

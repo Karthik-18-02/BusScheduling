@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bus Scheduler</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  </head>
+  <body>
+    <!-- Bus Scheduler Page -->
+    <div class="role-container" id="bus-scheduler-page">
+      <h2 class="role-header">Bus Scheduler</h2>
+
+      <!-- Button Group for Linked and Unlinked Duty Scheduling -->
+      <div class="button-group">
+        <button onclick="showLinkedDuty()">Linked Duty Scheduling</button>
+        <button onclick="showUnlinkedDuty()">Unlinked Duty Scheduling</button>
+      </div>
+
+      <!-- Linked Duty Scheduling Section -->
+      <div class="hidden" id="linked-duty-section">
+        <h3>Linked Duty Scheduling</h3>
+
+        <!-- Assign Button triggers the genetic algorithm-based auto-assign function -->
+        <button id="submitBtn" onclick="runGeneticAlgorithm()">
+          Auto Assign
+        </button>
+
+        <!-- Container to store assigned buses and crews -->
+        <div>
+          <h3>Assigned Buses</h3>
+          <ol id="assignedBusList">
+            <!-- Assigned buses will be dynamically added here -->
+          </ol>
+        </div>
+      </div>
+
+      <!-- Unlinked Duty Scheduling Section -->
+      <div class="hidden" id="unlinked-duty-section">
+        <h3>Unlinked Duty Scheduling</h3>
+        <div class="form-group">
+          <label for="availableCrewUnlinked">Available Crew</label>
+          <select id="availableCrewUnlinked">
+            <!-- Available crew names will be dynamically populated here -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="availableBusesUnlinked">Available Buses</label>
+          <select id="availableBusesUnlinked">
+            <!-- Available buses will be dynamically populated here -->
+          </select>
+        </div>
+        <button onclick="showUnassigned()">Show Unassigned</button>
+      </div>
+    </div>
+
+    <!-- Link to the bus_scheduler.js script -->
+    <script src="bus_scheduler.js"></script>
+  </body>
+</html>

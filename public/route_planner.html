@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Route Planner</title>
+  <link rel="stylesheet" href="style.css" />
+  
+  <!-- Add the Google Maps API script with your API key -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2ZugyH0nuDnwVF3ZnBpJkQxW6iAMMf8o&callback=initMap" async defer></script>
+</head>
+<body>
+  <div class="role-container" id="route-planner-page">
+    <h2 class="role-header">Route Planner</h2>
+
+    <!-- Dropdown for selecting bus number -->
+    <div class="form-group">
+      <label for="selectBusForRoute">Select Bus Number</label>
+      <select id="selectBusForRoute">
+        <!-- Route numbers will be dynamically populated here -->
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="startPlace">Select Start Place</label>
+      <select id="startPlace">
+        <!-- Bus stops will be dynamically populated here -->
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label for="destinationPlace">Select Destination Place</label>
+      <select id="destinationPlace">
+        <!-- Bus stops will be dynamically populated here -->
+      </select>
+    </div>
+
+    <!-- Google Maps container -->
+    <div id="map" style="height: 500px; width: 100%;"></div><br>
+
+    <button onclick="submitRoute()">Submit</button>
+  </div>
+  
+  <script src="route_planner.js"></script>
+</body>
+</html>

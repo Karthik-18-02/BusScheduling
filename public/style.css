@@ -1,0 +1,326 @@
+/* Global Styles */
+body {
+  font-family: "Georgia", "Times New Roman", serif;
+  background: url('https://plus.unsplash.com/premium_photo-1661963542752-9a8a1d72fb28?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YnVzZXN8ZW58MHx8MHx8fDA%3D') no-repeat center center fixed;
+  background-size: cover; /* Ensures the image covers the entire background */
+  margin: 0;
+  padding: 0;
+  line-height: 1.7;
+  color: #333;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* Container */
+.container {
+  width: 500px;
+  margin: 80px auto;
+  padding: 50px;
+  background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+.container:hover {
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.25); /* Deeper shadow on hover */
+  transform: scale(1.02); /* Slight zoom on hover */
+}
+
+h1, h2, h3 {
+  font-family: "Garamond", serif;
+  text-align: center;
+  color: #773344;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+p {
+  font-family: "Georgia", serif;
+  text-align: justify;
+  color: #6b4e31;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #773344;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+  width: 100%;
+  padding: 14px;
+  margin-top: 8px;
+  border: 2px solid #e1b07e;
+  border-radius: 10px;
+  font-size: 16px;
+  background-color: rgba(255, 247, 224, 0.8); /* Semi-transparent input background */
+  color: #6b4e31;
+  transition: all 0.3s ease-in-out;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+select:focus {
+  border-color: #ffae42; /* Vibrant focus color */
+  box-shadow: 0 0 8px rgba(255, 174, 66, 0.5);
+  outline: none;
+}
+
+/* Button Styling */
+button {
+  width: 100%;
+  padding: 16px;
+  background-color: #ff6f61; /* Bright Coral color */
+  background-image: linear-gradient(45deg, #ff6f61, #ffa07a);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  font-family: "Garamond", serif;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+button:hover {
+  background-image: linear-gradient(45deg, #ffa07a, #ff6f61); /* Reverse gradient */
+  transform: translateY(-4px); /* Hover lift */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+  transform: translateY(0); /* Return to default position on click */
+}
+
+/* Role Container */
+.role-container {
+  width: 752px;
+  margin: 80px auto;
+  padding: 50px;
+  background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+.role-container:hover {
+  background-color:rgba(255, 241, 208, 0.9);
+}
+
+.role-header {
+  text-align: center;
+  font-family: "Georgia", serif;
+  margin-bottom: 20px;
+  color: #9c4a44;
+  font-size: 24px;
+}
+
+/* Map Placeholder */
+.map-placeholder {
+  height: 350px;
+  background-color: rgba(255, 228, 196, 0.8); /* Semi-transparent map background */
+  border: 2px dashed #ffae42;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b56b45;
+  font-size: 20px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.map-placeholder:hover {
+  background-color: rgba(255, 245, 215, 0.9);
+}
+
+/* Button Group */
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+button-group button {
+  flex: 1;
+}
+
+/* Inline Forms */
+.form-inline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-inline > div {
+  flex: 1;
+}
+
+.form-inline > div:not(:last-child) {
+  margin-right: 15px;
+}
+
+/* User List */
+.user-list {
+  margin-top: 30px;
+}
+
+.user-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.user-list li {
+  padding: 12px;
+  background-color: rgba(255, 232, 214, 0.8); /* Semi-transparent background for list items */
+  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.user-list li:hover {
+  background-color: rgba(255, 218, 185, 0.9); /* Peach hover effect */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Back Button */
+#backbutton {
+  margin-top: 15px;
+  background-color: #ff8c42;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  display: block;
+  font-family: "Garamond", serif;
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+#backbutton:hover {
+  background-color: #ff6f42;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+#backbutton:active {
+  transform: translateY(0);
+}
+
+/* Miscellaneous */
+.hidden {
+  display: none;
+}
+
+.applyLeaveButtonClass {
+  width: 40%;
+  display: block;
+  margin: 20px auto; /* Centers the button horizontally */
+  padding: 10px 20px; /* Adds some padding to make the button larger */
+  font-size: 16px; /* Increases font size */
+  background-color: #007bff; /* Optional: Set a background color */
+  color: white; /* Optional: Set text color */
+  border: none;
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer;
+}
+
+.applyLeaveButtonClass:hover {
+  background-color: #0056b3; /* Optional: Darker background on hover */
+}
+
+/* Container to center the content */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading styles */
+h1 {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Form Group Styles */
+.form-group {
+  margin-bottom: 15px;
+}
+
+/* Label Styles */
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+/* Input and Textarea Field Styles */
+.input-field {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Button Styles */
+.btn {
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+  transition: background-color 0.3s ease;
+}
+
+/* Center the Apply Leave button */
+.applyLeaveButtonClass {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 30px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+#showUsersButton {
+  margin-top: 10px;
+}

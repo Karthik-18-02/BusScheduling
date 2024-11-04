@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Passenger</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="role-container" id="passenger-page">
+    <h2 class="role-header">Passenger</h2>
+    <div class="form-group">
+      <label for="passengerStartPlace">Select Start Place</label>
+      <select id="passengerStartPlace">
+        <!-- Bus stops will be dynamically populated here -->
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="passengerDestinationPlace">Select Destination Place</label>
+      <select id="passengerDestinationPlace">
+        <!-- Bus stops will be dynamically populated here -->
+      </select>
+    </div>
+    <button onclick="displayTimetable()">View Timetable</button>
+    <div id="timetableDisplay" class="hidden">
+      <!-- Timetable details will be dynamically inserted here -->
+    </div>  
+  </div>
+
+  <script src="passenger.js"></script>
+</body>
+</html>
