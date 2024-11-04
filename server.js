@@ -16,6 +16,10 @@ mongoose.connect("mongodb://localhost:27017/mini", {
   useUnifiedTopology: true,
 });
 
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((error) => console.error("MongoDB connection error:", error));
+
 // Define user schema (including admin roles)
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
