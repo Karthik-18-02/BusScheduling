@@ -135,5 +135,12 @@ app.get('/getStoredAssignments', async (req, res) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+const PORT = process.env.PORT || 5000; // Use the PORT environment variable or default to 10000
+const HOST = '0.0.0.0'; // Bind to all IP addresses
+
+app.listen(PORT, HOST, () => {
+  console.log(`Server running on http://${HOST}:${PORT}`);
+});
