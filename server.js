@@ -6,6 +6,63 @@ const app = express();
 const cors = require("cors");
 app.use(cors());
 
+const fs = require('fs');
+const path = require('path');
+const csv = require('csv-parser');
+
+// Function to load data from a CSV file
+function loadCSVData(filePath) {
+  return new Promise((resolve, reject) => {
+    const results = [];
+    fs.createReadStream(filePath)
+      .pipe(csv())
+      .on('data', (data) => results.push(data))
+      .on('end', () => resolve(results))
+      .on('error', (error) => reject(`Error loading CSV file ${filePath}: ${error.message}`));
+  });
+}
+
+// Define paths to your CSV files
+const busStopsFilePath = path.join(__dirname, 'public', 'busStops.csv');
+const cleanedBusStopsFilePath = path.join(__dirname, 'public', 'cleaned_busStops.csv');
+const fareStageFilePath = path.join(__dirname, 'public', 'farestagefarecharts_1.csv');
+const finalCleanedBusStopsFilePath = path.join(__dirname, 'public', 'final_cleaned_busStops.csv');
+const randomNamesFilePath = path.join(__dirname, 'public', 'RandomNames.csv');
+
+// Load each CSV file
+async function loadAllCSVFiles() {
+  try {
+    const busStopsData = await loadCSVData(busStopsFilePath);
+    console.log("Bus Stops Data:", busStopsData);
+
+    const cleanedBusStopsData = await loadCSVData(cleanedBusStopsFilePath);
+    console.log("Cleaned Bus Stops Data:", cleanedBusStopsData);
+
+    const fareStageData = await loadCSVData(fareStageFilePath);
+    console.log("Fare Stage Data:", fareStageData);
+
+    const finalCleanedBusStopsData = await loadCSVData(finalCleanedBusStopsFilePath);
+    console.log("Final Cleaned Bus Stops Data:", finalCleanedBusStopsData);
+
+    const randomNamesData = await loadCSVData(randomNamesFilePath);
+    console.log("Random Names Data:", randomNamesData);
+
+    // Return the data or process as needed
+    return { busStopsData, cleanedBusStopsData, fareStageData, finalCleanedBusStopsData, randomNamesData };
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Call the function to load all data
+loadAllCSVFiles().then(data => {
+  if (data) {
+    // Process data as needed
+    console.log("All data loaded successfully.");
+  }
+});
+
+
 // Middleware for parsing JSON and serving static files
 app.use(express.json());
 app.use(express.static("public"));
