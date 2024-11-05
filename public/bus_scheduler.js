@@ -421,38 +421,38 @@ function showUnassigned() {
 }
 
 
-// Function to automatically assign remaining crew members to remaining buses
+// Automatically assign remaining unassigned crew to unassigned buses
 function autoAssignRemainingCrew() {
-    let busIndex = 0; // For iterating over unassigned buses
+  let busIndex = 0; // To iterate over unassigned buses
 
-    // Assign as many unassigned crew members as possible to unassigned buses
-    while (unassignedCrew.length > 0 && unassignedBuses.length > 0) {
-        const crew = unassignedCrew.shift(); // Get the first unassigned crew member
-        const bus = unassignedBuses[busIndex]; // Get the first unassigned bus
-        
-        // Calculate the next bus number to assign the crew
-        const currentAssignedCount = bestSolution.filter(assign => assign.bus.split('(')[0] === bus.busNumber).length;
-        const busNumber = `${bus.busNumber}(${currentAssignedCount + 1})`;
+  // Assign each unassigned crew member to the next available unassigned bus
+  while (unassignedCrew.length > 0 && unassignedBuses.length > 0) {
+      const crew = unassignedCrew.shift(); // Take the first unassigned crew member
+      const bus = unassignedBuses[busIndex]; // Current unassigned bus
 
-        // Add to the best solution
-        bestSolution.push({ bus: busNumber, crew: crew });
+      // Generate the next bus number for assignment
+      const currentAssignedCount = bestSolution.filter(assign => assign.bus.split('(')[0] === bus.busNumber).length;
+      const busNumber = `${bus.busNumber}(${currentAssignedCount + 1})`;
 
-        console.log(`Auto-Assigned: ${crew} to ${busNumber}`);
+      // Add this assignment to the bestSolution
+      bestSolution.push({ bus: busNumber, crew: crew });
+      console.log(`Auto-Assigned: ${crew} to ${busNumber}`);
 
-        // If the bus is now fully assigned, move to the next bus
-        if (currentAssignedCount + 1 === bus.busCount) {
-            unassignedBuses.shift(); // Remove the fully assigned bus
-            busIndex = 0; // Reset the index for next bus
-        }
-    }
+      // Check if the bus is fully assigned and should be removed from the unassigned list
+      if (currentAssignedCount + 1 === bus.busCount) {
+          unassignedBuses.shift(); // Remove the fully assigned bus from unassignedBuses
+          busIndex = 0; // Reset index for the next bus
+      }
+  }
 
-    // Log results after auto-assignment
-    console.log("Remaining Unassigned Crew (after auto-assign):", unassignedCrew.length);
-    console.log("Remaining Unassigned Buses (after auto-assign):", unassignedBuses.length);
+  // Log remaining unassigned items
+  console.log("Remaining Unassigned Crew (after auto-assign):", unassignedCrew.length);
+  console.log("Remaining Unassigned Buses (after auto-assign):", unassignedBuses.length);
 
-    // Refresh the unassigned lists in the UI
-    showUnassigned();
+  // Update the UI to show the latest unassigned crew and buses
+  showUnassigned();
 }
+
 
 
 if (unassignedCrew.length > 0 && unassignedBuses.length === 0) {
