@@ -19,6 +19,7 @@ function initMap() {
   }
 }
 
+
 // Ensure the Google Map is initialized after the API script is fully loaded
 document.addEventListener('DOMContentLoaded', function () {
   if (typeof google !== 'undefined' && typeof google.maps !== 'undefined') {
@@ -245,34 +246,47 @@ function updateMapWithRoute() {
 let map;
 
 // Function to display the map with the bus route and stops
+// Function to display the map with the bus route and stops
 function displayMap(startPoint, endPoint, busStops) {
   if (map) {
-    map.remove();
+    map.remove(); // Remove any previous map instance
   }
 
-  map = L.map('map').setView([17.3850, 78.4867], 13); // Set view to Hyderabad
+  // Initialize the map centered on Delhi
+  map = L.map('map').setView([28.6139, 77.2090], 12); // Coordinates for Delhi
 
+  // Add OpenStreetMap tile layer
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
 
+  // Create route control
   L.Routing.control({
     waypoints: [
-      L.latLng(17.3850, 78.4867), // Placeholder coordinates for start point
-      L.latLng(17.4260, 78.4917)  // Placeholder coordinates for end point
+      L.latLng(startPoint.lat, startPoint.lng),
+      L.latLng(endPoint.lat, endPoint.lng)
     ],
-    routeWhileDragging: true
+    routeWhileDragging: true,
+    geocoder: L.Control.Geocoder.nominatim() // For better geocoding support
   }).addTo(map);
 
-  busStops.forEach((stop, index) => {
-    L.marker([17.3850 + (index * 0.01), 78.4867]) // Placeholder coordinates
+  // Add bus stops as markers
+  busStops.forEach(stop => {
+    L.marker([stop.lat, stop.lng])
       .addTo(map)
-      .bindPopup(stop)
-      .openPopup();
+      .bindPopup(stop.name);
   });
 }
 
-// Initialize the map when DOM is ready
 document.addEventListener('DOMContentLoaded', function () {
-  loadAssignedBusRoute();
+  const startPoint = { lat: 28.6139, lng: 77.2090 }; // Example: India Gate
+  const endPoint = { lat: 28.7041, lng: 77.1025 };   // Example: Red Fort
+  const busStops = [
+    { lat: 28.6200, lng: 77.2150, name: 'Stop 1' },
+    { lat: 28.6300, lng: 77.2200, name: 'Stop 2' },
+    { lat: 28.6400, lng: 77.2300, name: 'Stop 3' }
+  ];
+
+  displayMap(startPoint, endPoint, busStops);
 });
+
