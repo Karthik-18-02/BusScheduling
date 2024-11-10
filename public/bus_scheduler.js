@@ -30,7 +30,7 @@ function parseCSV(csvText) {
 // Fetch the crew members from the database
 async function fetchBusSchedulers() {
   try {
-    const response = await fetch('http://localhost:5000/getBusSchedulers');
+    const response = await fetch('http://https://busscheduling.onrender.com/getBusSchedulers');
     const busSchedulers = await response.json();
     return busSchedulers.map(user => user.name); // Extract crew names
   } catch (error) {
@@ -41,7 +41,7 @@ async function fetchBusSchedulers() {
 
 async function loadCrewMembers() {
   try {
-    const response = await fetch('http://localhost:5000/getUsers'); // Fetch all users from backend
+    const response = await fetch('http://https://busscheduling.onrender.com/getUsers'); // Fetch all users from backend
     const users = await response.json();
 
     console.log("Crew members loaded.");
@@ -124,7 +124,7 @@ function crossover(parent1, parent2) {
 async function saveAssignments() {
   console.log("Best Solution Assignments: ", bestSolution);
   try {
-      const response = await fetch('http://localhost:5000/saveAssignments', {
+      const response = await fetch('http://https://busscheduling.onrender.com/saveAssignments', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -169,7 +169,7 @@ async function saveAssignments() {
   // Fetch existing bus assignments from the backend
   async function fetchStoredAssignments() {
     try {
-      const response = await fetch('http://localhost:5000/getStoredAssignments');
+      const response = await fetch('http://https://busscheduling.onrender.com/getStoredAssignments');
       const assignments = await response.json();
       return assignments;
     } catch (error) {

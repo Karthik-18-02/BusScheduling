@@ -4,7 +4,15 @@ const mongoose = require("mongoose");
 const path = require("path");
 const app = express();
 const cors = require("cors");
-app.use(cors());
+const response = await fetch('/RandomNames.csv');
+
+app.use(cors({
+  origin: 'busscheduling.onrender.com', // Replace with your client's domain
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 const fs = require('fs');
 // const path = require('path');
