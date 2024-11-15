@@ -28,6 +28,9 @@ const cleanedBusStopsFilePath = path.join(__dirname, 'public', 'cleaned_busStops
 const fareStageFilePath = path.join(__dirname, 'public', 'farestagefarecharts_1.csv');
 const finalCleanedBusStopsFilePath = path.join(__dirname, 'public', 'final_cleaned_busStops.csv');
 const randomNamesFilePath = path.join(__dirname, 'public', 'RandomNames.csv');
+const crewFilePath = path.join(__dirname, 'public', 'RandomNames.csv');
+const busFilePath = path.join(__dirname, 'public', 'farestagefarecharts_1.csv');
+
 
 // Load each CSV file
 async function loadAllCSVFiles() {
@@ -73,10 +76,15 @@ app.use(express.static("public"));
 //   useUnifiedTopology: true,
 // });
 
-mongoose.connect(process.env.MONGO_URI) //
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((error) => console.error("MongoDB connection error:", error));
-
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true
+}).then(() => {
+  console.log("Connected to MongoDB successfully!");
+}).catch((error) => {
+  console.error("Error connecting to MongoDB:", error);
+});
 
 // Define user schema (including admin roles)
 const UserSchema = new mongoose.Schema({
@@ -101,13 +109,20 @@ const User = mongoose.model("Administrator", UserSchema);
 
 app.post("/addUser", (req, res) => {
   const newUser = new User(req.body);
-  newUser
-    .save()
-    .then(() => res.status(201).json({ message: "User added successfully!" })) // Return JSON
-    .catch((err) =>
-      res.status(400).json({ error: "Error adding user: " + err })
-    ); // Return JSON on error
+
+  newUser.save()
+    .then(() => res.status(201).json({ message: "User added successfully!" }))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).json({ error: "Validation Error: " + err.message });
+      } else if (err.code === 11000) {  // MongoDB duplicate key error
+        res.status(400).json({ error: "Duplicate Login ID. A user with this login ID already exists." });
+      } else {
+        res.status(500).json({ error: "Error adding user: " + err.message });
+      }
+    });
 });
+
 
 // Route to specifically add an administrator
 app.post("/addAdmin", (req, res) => {
@@ -182,6 +197,54 @@ app.get('/getBusSchedulers', async (req, res) => {
     res.status(500).json({ error: 'Failed to retrieve bus schedulers' });
   }
 });
+
+// app.get('/getCrew', (req, res) => {
+//   fs.createReadStream(crewFilePath)
+//     .pipe(csv())
+//     .on('data', (data) => {
+//       // Push data to an array or process as needed
+//     })
+//     .on('end', () => {
+//       res.json(crewDataArray); // Send parsed data as JSON
+//     })
+//     .on('error', (error) => {
+//       res.status(500).send('Error loading crew data');
+//     });
+// });
+
+
+app.get('/getCrew', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'RandomNames.csv'); // Verify this path is correct
+
+  fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+          console.error('Error reading CSV file:', err);
+          return res.status(500).json({ error: 'Error reading CSV file' });
+      }
+
+      const crewData = parseCSV(data); // Ensure parseCSV correctly processes the data
+      if (!crewData || crewData.length === 0) {
+          return res.status(404).json({ error: 'No crew data found in CSV' });
+      }
+      res.json(crewData);
+  });
+});
+
+
+app.get('/getBuses', (req, res) => {
+  fs.createReadStream(busFilePath)
+    .pipe(csv())
+    .on('data', (data) => {
+      // Push data to an array or process as needed
+    })
+    .on('end', () => {
+      res.json(busDataArray); // Send parsed data as JSON
+    })
+    .on('error', (error) => {
+      res.status(500).send('Error loading bus data');
+    });
+});
+
 
 app.get('/getStoredAssignments', async (req, res) => {
   try {

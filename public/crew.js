@@ -1,32 +1,3 @@
-// Function to initialize the Google Map
-function initMap() {
-  const mapOptions = {
-    zoom: 12,
-    center: { lat: 28.6139, lng: 77.209 },  // Default location (e.g., Delhi)
-  };
-
-  // Check if map placeholder exists in the DOM before rendering
-  const mapContainer = document.getElementById('map');
-  if (mapContainer) {
-    const map = new google.maps.Map(mapContainer, mapOptions);
-
-    // Example marker
-    const marker = new google.maps.Marker({
-      position: { lat: 28.6139, lng: 77.209 },
-      map: map,
-      title: "Delhi",
-    });
-  }
-}
-
-
-// Ensure the Google Map is initialized after the API script is fully loaded
-document.addEventListener('DOMContentLoaded', function () {
-  if (typeof google !== 'undefined' && typeof google.maps !== 'undefined') {
-    initMap();  // Initialize the map when the Google Maps API is fully loaded
-  }
-});
-
 // Function to load route numbers from farestagefarecharts_1.csv and populate the "Select Bus Number" dropdown
 async function loadBusNumbers() {
 try {
