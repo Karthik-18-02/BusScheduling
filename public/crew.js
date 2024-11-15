@@ -250,7 +250,7 @@ let map;
 function displayMap(startPoint, endPoint, busStops) {
   if (map) {
     map.remove(); // Remove any previous map instance
-  }
+  }       
 
   // Initialize the map centered on Delhi
   map = L.map('map').setView([28.6139, 77.2090], 12); // Coordinates for Delhi
