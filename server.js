@@ -6,6 +6,7 @@ const app = express();
 const cors = require("cors");
 app.use(cors());
 
+<<<<<<< HEAD
 const fs = require('fs');
 // const path = require('path');
 const csv = require('csv-parser');
@@ -85,6 +86,16 @@ mongoose.connect(process.env.MONGO_URI, {
 }).catch((error) => {
   console.error("Error connecting to MongoDB:", error);
 });
+=======
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((error) => console.error("MongoDB connection error:", error));
+
+console.log('MongoDB URI:', process.env);
+// Middleware for parsing JSON and serving static files
+app.use(express.json());
+app.use(express.static("public"));
+>>>>>>> 93fec7dbf2f2a62427f01d97b0096b70fa52fdfe
 
 // Define user schema (including admin roles)
 const UserSchema = new mongoose.Schema({
@@ -258,10 +269,12 @@ app.get('/getStoredAssignments', async (req, res) => {
 // Start the server
 // const PORT = process.env.PORT || 5000;
 // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-const PORT = process.env.PORT || 5000; // Use the PORT environment variable or default to 10000
-const HOST = '0.0.0.0'; // Bind to all IP addresses
+// const PORT = process.env.PORT || 5000; // Use the PORT environment variable or default to 10000
+// const HOST = '0.0.0.0'; // Bind to all IP addresses
 
-app.listen(PORT, HOST, () => {
-  console.log(`Server running on http://${HOST}:${PORT}`);
-});
+// app.listen(PORT, HOST, () => {
+//   console.log(`Server running on http://${HOST}:${PORT}`);
+// });

@@ -27,11 +27,31 @@ function parseCSV(csvText) {
   return rows.slice(1); // Exclude the header
 }
 
+<<<<<<< HEAD
 // Load crew members and bus numbers from CSV files dynamically
 async function loadCrewMembers() {
   try {
     const response = await fetch("RandomNames.csv");
     const text = await response.text();
+=======
+// Fetch the crew members from the database
+async function fetchBusSchedulers() {
+  try {
+    const response = await fetch('http://https://busscheduling.onrender.com/getBusSchedulers');
+    const busSchedulers = await response.json();
+    return busSchedulers.map(user => user.name); // Extract crew names
+  } catch (error) {
+    console.error("Error fetching bus schedulers:", error);
+    return [];
+  }
+}
+
+async function loadCrewMembers() {
+  try {
+    const response = await fetch('http://https://busscheduling.onrender.com/getUsers'); // Fetch all users from backend
+    const users = await response.json();
+
+>>>>>>> 93fec7dbf2f2a62427f01d97b0096b70fa52fdfe
     console.log("Crew members loaded.");
     return parseCSV(text)
       .map((row) => row[0].trim())
@@ -108,6 +128,7 @@ function crossover(parent1, parent2) {
 }
 
 async function saveAssignments() {
+<<<<<<< HEAD
     console.log("Best Solution Assignments: ", bestSolution);
     try {
       const response = await fetch('http://localhost:5000/saveAssignments', {
@@ -116,6 +137,16 @@ async function saveAssignments() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ assignments: bestSolution }),  // Ensure 'bestSolution' contains the correct data
+=======
+  console.log("Best Solution Assignments: ", bestSolution);
+  try {
+      const response = await fetch('http://https://busscheduling.onrender.com/saveAssignments', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ assignments: bestSolution }),  // Send bestSolution to backend
+>>>>>>> 93fec7dbf2f2a62427f01d97b0096b70fa52fdfe
       });
   
       const data = await response.json();
@@ -124,6 +155,43 @@ async function saveAssignments() {
       } else {
         alert('Error saving assignments: ' + data.error);
       }
+<<<<<<< HEAD
+=======
+  } catch (error) {
+      console.error('Error during save:', error);
+  }
+}
+
+
+
+  
+  async function populateCrewDropdown() {
+    const crewMembers = await loadCrewMembers(); // Load crew members
+    const dropdown = document.getElementById('availableCrewUnlinked');
+  
+    crewMembers.forEach(member => {
+      const option = document.createElement('option');
+      option.value = member;
+      option.textContent = member;
+      dropdown.appendChild(option); // Add each member to the dropdown
+    });
+  }
+  
+  // Call populateCrewDropdown on page load
+  window.onload = function () {
+    populateCrewDropdown();  // Populate the crew members dropdown
+    initMap();  // Initialize map if needed
+  };
+  
+  let existingAssignments = [];  // Store previously assigned buses
+
+  // Fetch existing bus assignments from the backend
+  async function fetchStoredAssignments() {
+    try {
+      const response = await fetch('http://https://busscheduling.onrender.com/getStoredAssignments');
+      const assignments = await response.json();
+      return assignments;
+>>>>>>> 93fec7dbf2f2a62427f01d97b0096b70fa52fdfe
     } catch (error) {
       console.error('Error during save:', error);
     }
