@@ -4,10 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Route Planner</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <link rel="stylesheet" href="style.css" />
-  
-  <!-- Add the Google Maps API script with your API key -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2ZugyH0nuDnwVF3ZnBpJkQxW6iAMMf8o&callback=initMap" async defer></script>
 </head>
 <body>
   <div class="role-container" id="route-planner-page">
@@ -40,7 +38,12 @@
 
     <button onclick="submitRoute()">Submit</button>
   </div>
-  
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
   <script src="route_planner.js"></script>
 </body>
 </html>

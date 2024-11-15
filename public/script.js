@@ -12,15 +12,57 @@ function navigateToHome() {
 
 // Example login function (to be expanded based on actual logic)
 function login() {
+  const loginId = document.getElementById("newLoginId").value.trim();
+  const password = document.getElementById("newPassword").value.trim(); // Assuming password validation if needed
   const role = document.getElementById("role").value;
-  hideAllPages(); // Hide all role-specific pages
 
-  // Show the selected role's content
-  document.getElementById(role + '-page').classList.remove('hidden');
-  
-  // Scroll to the top of the page
-  window.scrollTo(0, 0);
+  // Validate the input fields to ensure they are not empty
+  if (!loginId || !password || !role) {
+    alert("Please fill out all fields to log in.");
+    return;
+  }
+
+  // Role-based validation
+  if (role === "crew.html") {
+    // Check if the login ID exists in the crew list
+    if (!crewNames.includes(loginId)) {
+      alert("You are not registered as a crew member. Please contact the administrator.");
+      return;
+    }
+  }
+
+  // At this point, the user has successfully logged in
+  // Redirect based on the user's role
+  switch (role) {
+    case 'administrator.html':
+      window.location.href = 'administrator.html'; // Redirect to administrator page
+      break;
+    case 'bus_scheduler.html':
+      window.location.href = 'bus_scheduler.html'; // Redirect to bus scheduler page
+      break;
+    case 'crew.html':
+      window.location.href = 'crew.html'; // Redirect to crew page
+      break;
+    case 'route_planner.html':
+      window.location.href = 'route_planner.html'; // Redirect to route planner page
+      break;
+    case 'passenger.html':
+      window.location.href = 'passenger.html'; // Redirect to passenger page
+      break;
+    default:
+      alert('Invalid role selected.');
+  }
 }
+
+// Attach event listeners after DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  const loginButton = document.getElementById('loginButton');
+  if (loginButton) {
+    loginButton.addEventListener('click', login);
+  } else {
+    console.error("Element with ID 'loginButton' not found");
+  }
+});
 
 
 function addUser() {
@@ -233,9 +275,8 @@ async function loadCrewFromCsv() {
     const rows = data.split("\n").map(row => row.split(","));
 
     // Assuming crew names are in the first column
-    crewNames = rows.slice(1).map(row => row[0]?.trim()).filter(Boolean);  // Load only non-empty names
-
-    console.log("Crew names loaded:", crewNames);
+    crewNames = rows.slice(1).map(row => row[0]?.trim()).filter(Boolean);
+    console.log("Crew names loaded:", crewNames); // Debugging to check loaded names
 
   } catch (error) {
     console.error("Error loading crew from CSV:", error);
@@ -407,7 +448,7 @@ async function loadBusNumbers() {
     rows.slice(4).forEach(row => {  // Starting from row 4 to skip header
       const routeNumber = row[routeNoIndex];
 
-      if (routeNumber && !busNumberDropdown.querySelector(`option[value="${routeNumber}"]`)) { 
+      if (routeNumber && !busNumberDropdown.querySelector(option[value="${routeNumber}"])) { 
         // Check for non-empty route numbers and avoid duplicates
         const optionBusNumber = document.createElement("option");
         optionBusNumber.value = routeNumber;

@@ -27,35 +27,21 @@ function parseCSV(csvText) {
   return rows.slice(1); // Exclude the header
 }
 
-// Fetch the crew members from the database
-async function fetchBusSchedulers() {
-  try {
-    const response = await fetch('http://https://busscheduling.onrender.com/getBusSchedulers');
-    const busSchedulers = await response.json();
-    return busSchedulers.map(user => user.name); // Extract crew names
-  } catch (error) {
-    console.error("Error fetching bus schedulers:", error);
-    return [];
-  }
-}
-
+// Load crew members and bus numbers from CSV files dynamically
 async function loadCrewMembers() {
   try {
-    const response = await fetch('http://https://busscheduling.onrender.com/getUsers'); // Fetch all users from backend
-    const users = await response.json();
-
+    const response = await fetch("RandomNames.csv");
+    const text = await response.text();
     console.log("Crew members loaded.");
-
-    // Filter only users with the 'bus-scheduler' role
-    const busSchedulers = users.filter(user => user.role === 'crew');
-
-    return busSchedulers.map(user => user.name); // Return names of bus schedulers
+    return parseCSV(text)
+      .map((row) => row[0].trim())
+      .filter(Boolean);
   } catch (error) {
     console.error("Error loading crew members:", error);
     return [];
   }
 }
-
+//hi
 
 async function loadBusData() {
   try {
@@ -120,123 +106,37 @@ function crossover(parent1, parent2) {
   ];
   return [child1, child2];
 }
-
+//
 async function saveAssignments() {
-  console.log("Best Solution Assignments: ", bestSolution);
-  try {
-      const response = await fetch('http://https://busscheduling.onrender.com/saveAssignments', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ assignments: bestSolution }),  // Send bestSolution to backend
+    console.log("Best Solution Assignments: ", bestSolution);
+    try {
+      const response = await fetch('http://localhost:5000/saveAssignments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ assignments: bestSolution }),  // Ensure 'bestSolution' contains the correct data
       });
-
+  
       const data = await response.json();
       if (response.ok) {
-          alert(data.message);  // Success message
+        alert(data.message);  // Success message
       } else {
-          alert('Error saving assignments: ' + data.error);
+        alert('Error saving assignments: ' + data.error);
       }
-  } catch (error) {
-      console.error('Error during save:', error);
-  }
-}
-
-
-
-  
-  async function populateCrewDropdown() {
-    const crewMembers = await loadCrewMembers(); // Load crew members
-    const dropdown = document.getElementById('availableCrewUnlinked');
-  
-    crewMembers.forEach(member => {
-      const option = document.createElement('option');
-      option.value = member;
-      option.textContent = member;
-      dropdown.appendChild(option); // Add each member to the dropdown
-    });
-  }
-  
-  // Call populateCrewDropdown on page load
-  window.onload = function () {
-    populateCrewDropdown();  // Populate the crew members dropdown
-    initMap();  // Initialize map if needed
-  };
-  
-  let existingAssignments = [];  // Store previously assigned buses
-
-  // Fetch existing bus assignments from the backend
-  async function fetchStoredAssignments() {
-    try {
-      const response = await fetch('http://https://busscheduling.onrender.com/getStoredAssignments');
-      const assignments = await response.json();
-      return assignments;
     } catch (error) {
-      console.error("Error fetching stored assignments:", error);
-      return [];
+      console.error('Error during save:', error);
     }
   }
-
-// Run the genetic algorithm and combine with existing assignments
-async function runGeneticAlgorithm() {
-  try {
-    crewMembers = await loadCrewMembers();  // Load all crew members
-    busData = await loadBusData();  // Load buses from the CSV
-    existingAssignments = await fetchStoredAssignments();  // Fetch stored assignments
-    console.log("Running Genetic Algorithm...");
-
-    if (crewMembers.length === 0 || busData.length === 0) {
-      alert("Error: Could not load crew members or buses. Please check CSV files.");
-      return;
-    }
-
-    let population = initializePopulation();  // Generate initial population
-
-    for (let generation = 0; generation < generations; generation++) {
-      population.forEach(individual => individual.fitness = calculateFitness(individual));
-      population.sort((a, b) => b.fitness - a.fitness);
-
-      const newPopulation = [];
-      for (let i = 0; i < populationSize / 2; i += 2) {
-        const [child1, child2] = crossover(population[i], population[i + 1]);
-        newPopulation.push(mutate(child1), mutate(child2));
-      }
-
-      population = newPopulation;
-    }
-
-    bestSolution = combineWithExistingAssignments(population[0]);  // Combine new and existing assignments
-
-    displayResults(bestSolution);  // Display the results
-    await saveAssignments();  // Save the new combined result to the backend
-
-    // After assignment, determine unassigned crew and buses
-    calculateUnassigned(bestSolution);
-
-  } catch (error) {
-    console.error('Error during GA execution:', error);
-    alert("Error during GA execution. Check the console for more details.");
+  
+  
+  
+  // Call saveAssignments after the GA finishes running
+  async function runGeneticAlgorithm() {
+    // Existing GA logic...
+    displayResults(bestSolution);  // Display the result
+    await saveAssignments();  // Save the result to the database
   }
-}
-
-// Combine new assignments with existing ones, avoiding duplication
-function combineWithExistingAssignments(newAssignments) {
-  const existingCrew = new Set(existingAssignments.map(assign => assign.crew));
-  const existingBusAssignments = new Set(existingAssignments.map(assign => assign.bus)); // Track existing buses
-  const combinedSolution = [...existingAssignments];  // Start with existing assignments
-
-  newAssignments.forEach(assign => {
-    if (!existingCrew.has(assign.crew) && !existingBusAssignments.has(assign.bus)) {
-      combinedSolution.push(assign);  // Add only if the crew and bus haven't been assigned
-      existingCrew.add(assign.crew);  // Track the new assignment
-      existingBusAssignments.add(assign.bus);  // Track the assigned bus
-    }
-  });
-
-  return combinedSolution;
-}
-
 
   
 
@@ -294,21 +194,15 @@ async function runGeneticAlgorithm() {
 
 
 // Display the results of the GA in the assigned buses list
-// Display the results of the GA in the assigned buses list without duplicates
 function displayResults(bestSolution) {
   const assignedBusList = document.getElementById("assignedBusList");
-  assignedBusList.innerHTML = "";  // Clear previous entries
-  const seen = new Set();  // Track seen bus-crew pairs to avoid duplicates
-
-  bestSolution.forEach(assign => {
-    const pair = `${assign.crew}-${assign.bus}`;
-    if (!seen.has(pair)) {
-      const listItem = document.createElement("li");
-      listItem.textContent = `${assign.crew} - ${assign.bus}`;
-      assignedBusList.appendChild(listItem);
-      seen.add(pair);  // Mark the pair as seen
-    }
+  assignedBusList.innerHTML = "";
+  bestSolution.forEach((assign) => {
+    const listItem = document.createElement("li");
+    listItem.textContent = `${assign.crew} - ${assign.bus}`;
+    assignedBusList.appendChild(listItem);
   });
+  console.log("Results displayed.");
 }
 
 // let assignedCrew = new Set();
@@ -356,103 +250,103 @@ function displayResults(bestSolution) {
 //   }
 // }
 
-// Calculate unassigned buses and display them in the unlinked duty section
+// Function to calculate unassigned crew members and buses
 function calculateUnassigned(bestSolution) {
-  const assignedCrew = new Set(bestSolution.map(assign => assign.crew));
+    assignedCrew = new Set(bestSolution.map(assign => assign.crew));
 
-  // Unassigned crew members
-  unassignedCrew = crewMembers.filter(crew => !assignedCrew.has(crew));
+    // Unassigned crew members (those who are not in the assignedCrew set)
+    unassignedCrew = crewMembers.filter(crew => !assignedCrew.has(crew));
 
-  // Track bus assignment counts
-  const busAssignmentCounts = {};
-  bestSolution.forEach(assign => {
-    const route = assign.bus.split('(')[0];
-    if (!busAssignmentCounts[route]) {
-      busAssignmentCounts[route] = 0;
-    }
-    busAssignmentCounts[route] += 1;
-  });
+    // Track how many buses have been assigned for each route
+    const busAssignmentCounts = {};
+    bestSolution.forEach(assign => {
+        const route = assign.bus.split('(')[0]; // Get the route number
+        if (!busAssignmentCounts[route]) {
+            busAssignmentCounts[route] = 0;
+        }
+        busAssignmentCounts[route] += 1; // Increment the count of assigned buses for the route
+    });
 
-  // Unassigned buses: buses that haven't been fully assigned
-  unassignedBuses = busData.filter(bus => {
-    const assignedCount = busAssignmentCounts[bus.busNumber] || 0;
-    return assignedCount < bus.busCount;
-  });
+    // Unassigned buses: buses that haven't been fully assigned
+    unassignedBuses = busData.filter(bus => {
+        const assignedCount = busAssignmentCounts[bus.busNumber] || 0;
+        return assignedCount < bus.busCount;
+    });
 
-  // Show unassigned crew and buses in the unlinked duty section
-  showUnassigned();
+    console.log("Assigned Crew Count:", assignedCrew.size);
+    console.log("Unassigned Crew (before auto-assign):", unassignedCrew.length);
+    console.log("Unassigned Buses (before auto-assign):", unassignedBuses.length);
+
+    // Automatically assign remaining crew to remaining buses
+    autoAssignRemainingCrew();
 }
 
-
-// Display unassigned buses and crew, grouped by route number
+// Function to display unassigned crew or buses in the unlinked duty section
 function showUnassigned() {
-  const unassignedCrewList = document.getElementById('availableCrewUnlinked');
-  const unassignedBusList = document.getElementById('availableBusesUnlinked');
+    const unassignedCrewList = document.getElementById('availableCrewUnlinked');
+    const unassignedBusList = document.getElementById('availableBusesUnlinked');
 
-  unassignedCrewList.innerHTML = '';  // Clear previous entries
-  unassignedBusList.innerHTML = '';
+    // Clear previous entries
+    unassignedCrewList.innerHTML = '';
+    unassignedBusList.innerHTML = '';
 
-  // Populate unassigned crew members
-  unassignedCrew.forEach(crew => {
-    const option = document.createElement('option');
-    option.value = crew;
-    option.textContent = crew;
-    unassignedCrewList.appendChild(option);
-  });
+    // Log the number of unassigned crew members for verification
+    console.log("Unassigned Crew (after calculation):", unassignedCrew.length);
+    console.log("Unassigned Buses (after calculation):", unassignedBuses.length);
 
-  // Group unassigned buses by route and count the remaining buses for each route
-  const routeBusCounts = {};
+    // Populate unassigned crew members
+    unassignedCrew.forEach(crew => {
+        const option = document.createElement('option');
+        option.value = crew;
+        option.textContent = crew;
+        unassignedCrewList.appendChild(option);
+    });
 
-  unassignedBuses.forEach(bus => {
-    if (!routeBusCounts[bus.busNumber]) {
-      routeBusCounts[bus.busNumber] = 0;  // Initialize count for this route
-    }
-    routeBusCounts[bus.busNumber] += 1;  // Increment the count of unassigned buses for this route
-  });
+    // Populate unassigned buses
+    unassignedBuses.forEach(bus => {
+        const option = document.createElement('option');
+        option.value = bus.busNumber;
+        option.textContent = `${bus.busNumber} (${bus.busCount} buses remaining)`;
+        unassignedBusList.appendChild(option);
+    });
 
-  // Display grouped unassigned buses by route number and remaining bus count
-  Object.keys(routeBusCounts).forEach(route => {
-    const option = document.createElement('option');
-    const remainingCount = routeBusCounts[route];
-    option.value = route;
-    option.textContent = `Route ${route} (${remainingCount} bus${remainingCount > 1 ? 'es' : ''} remaining)`;
-    unassignedBusList.appendChild(option);
-  });
+    console.log("Displayed unassigned crew and buses.");
 }
 
 
-// Automatically assign remaining unassigned crew to unassigned buses
+
+// Function to automatically assign remaining crew members to remaining buses
 function autoAssignRemainingCrew() {
-  let busIndex = 0; // To iterate over unassigned buses
+    let busIndex = 0; // For iterating over unassigned buses
 
-  // Assign each unassigned crew member to the next available unassigned bus
-  while (unassignedCrew.length > 0 && unassignedBuses.length > 0) {
-      const crew = unassignedCrew.shift(); // Take the first unassigned crew member
-      const bus = unassignedBuses[busIndex]; // Current unassigned bus
+    // Assign as many unassigned crew members as possible to unassigned buses
+    while (unassignedCrew.length > 0 && unassignedBuses.length > 0) {
+        const crew = unassignedCrew.shift(); // Get the first unassigned crew member
+        const bus = unassignedBuses[busIndex]; // Get the first unassigned bus
+        
+        // Calculate the next bus number to assign the crew
+        const currentAssignedCount = bestSolution.filter(assign => assign.bus.split('(')[0] === bus.busNumber).length;
+        const busNumber = `${bus.busNumber}(${currentAssignedCount + 1})`;
 
-      // Generate the next bus number for assignment
-      const currentAssignedCount = bestSolution.filter(assign => assign.bus.split('(')[0] === bus.busNumber).length;
-      const busNumber = `${bus.busNumber}(${currentAssignedCount + 1})`;
+        // Add to the best solution
+        bestSolution.push({ bus: busNumber, crew: crew });
 
-      // Add this assignment to the bestSolution
-      bestSolution.push({ bus: busNumber, crew: crew });
-      console.log(`Auto-Assigned: ${crew} to ${busNumber}`);
+        console.log(`Auto-Assigned: ${crew} to ${busNumber}`);
 
-      // Check if the bus is fully assigned and should be removed from the unassigned list
-      if (currentAssignedCount + 1 === bus.busCount) {
-          unassignedBuses.shift(); // Remove the fully assigned bus from unassignedBuses
-          busIndex = 0; // Reset index for the next bus
-      }
-  }
+        // If the bus is now fully assigned, move to the next bus
+        if (currentAssignedCount + 1 === bus.busCount) {
+            unassignedBuses.shift(); // Remove the fully assigned bus
+            busIndex = 0; // Reset the index for next bus
+        }
+    }
 
-  // Log remaining unassigned items
-  console.log("Remaining Unassigned Crew (after auto-assign):", unassignedCrew.length);
-  console.log("Remaining Unassigned Buses (after auto-assign):", unassignedBuses.length);
+    // Log results after auto-assignment
+    console.log("Remaining Unassigned Crew (after auto-assign):", unassignedCrew.length);
+    console.log("Remaining Unassigned Buses (after auto-assign):", unassignedBuses.length);
 
-  // Update the UI to show the latest unassigned crew and buses
-  showUnassigned();
+    // Refresh the unassigned lists in the UI
+    showUnassigned();
 }
-
 
 
 if (unassignedCrew.length > 0 && unassignedBuses.length === 0) {

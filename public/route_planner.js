@@ -1,24 +1,3 @@
-// Function to initialize the Google Map
-function initMap() {
-  const mapOptions = {
-    zoom: 12,
-    center: { lat: 28.6139, lng: 77.209 },  // Default location (e.g., Delhi)
-  };
-
-  // Check if map placeholder exists in the DOM before rendering
-  const mapContainer = document.getElementById('map');
-  if (mapContainer) {
-    const map = new google.maps.Map(mapContainer, mapOptions);
-
-    // Example marker
-    const marker = new google.maps.Marker({
-      position: { lat: 28.6139, lng: 77.209 },
-      map: map,
-      title: "Delhi",
-    });
-  }
-}
-
 // Function to handle route submission (for route planner)
 function submitRoute() {
   alert("Route submitted successfully!");
@@ -100,10 +79,56 @@ async function loadBusNumbers() {
     console.error("Error loading route numbers:", error);
   }
 }
+let map;
+
+// Function to display the map with the bus route and stops
+// Function to display the map with the bus route and stops
+function displayMap(startPoint, endPoint, busStops) {
+  if (map) {
+    map.remove(); // Remove any previous map instance
+  }       
+
+  // Initialize the map centered on Delhi
+  map = L.map('map').setView([28.6139, 77.2090], 12); // Coordinates for Delhi
+
+  // Add OpenStreetMap tile layer
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Create route control
+  L.Routing.control({
+    waypoints: [
+      L.latLng(startPoint.lat, startPoint.lng),
+      L.latLng(endPoint.lat, endPoint.lng)
+    ],
+    routeWhileDragging: true,
+    geocoder: L.Control.Geocoder.nominatim() // For better geocoding support
+  }).addTo(map);
+
+  // Add bus stops as markers
+  busStops.forEach(stop => {
+    L.marker([stop.lat, stop.lng])
+      .addTo(map)
+      .bindPopup(stop.name);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const startPoint = { lat: 28.6139, lng: 77.2090 }; // Example: India Gate
+  const endPoint = { lat: 28.7041, lng: 77.1025 };   // Example: Red Fort
+  const busStops = [
+    { lat: 28.6200, lng: 77.2150, name: 'Stop 1' },
+    { lat: 28.6300, lng: 77.2200, name: 'Stop 2' },
+    { lat: 28.6400, lng: 77.2300, name: 'Stop 3' }
+  ];
+
+  displayMap(startPoint, endPoint, busStops);
+});
+
 
 // Call the functions to load bus stops and bus numbers on window load
 window.onload = function () {
-  initMap();           // Initialize the Google Map
   loadBusStops();      // Load bus stops from CSV
   loadBusNumbers();    // Load bus numbers from CSV
 };

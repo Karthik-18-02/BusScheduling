@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
@@ -6,14 +5,15 @@ const app = express();
 const cors = require("cors");
 app.use(cors());
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((error) => console.error("MongoDB connection error:", error));
-
-console.log('MongoDB URI:', process.env);
 // Middleware for parsing JSON and serving static files
 app.use(express.json());
 app.use(express.static("public"));
+
+// Connect to MongoDB
+mongoose.connect("mongodb://localhost:27017/mini", {
+  // useNewUrlParser: true,
+  // useUnifiedTopology: true,
+});
 
 // Define user schema (including admin roles)
 const UserSchema = new mongoose.Schema({
@@ -84,22 +84,21 @@ const Assignment = mongoose.model("Assignment", AssignmentSchema);
 
 app.post("/saveAssignments", async (req, res) => {
   try {
-      const assignments = req.body.assignments;
-      console.log("Received Assignments:", assignments); // Log the received data
+    const assignments = req.body.assignments;
+    console.log("Received Assignments:", assignments); // Log the received data
 
-      // Save all assignments to the database
-      if (assignments && assignments.length > 0) {
-          await Assignment.insertMany(assignments);
-          res.status(201).json({ message: "Assignments saved successfully!" });
-      } else {
-          res.status(400).json({ error: "No assignments provided." });
-      }
+    // Save all assignments to the database
+    if (assignments && assignments.length > 0) {
+      await Assignment.insertMany(assignments);
+      res.status(201).json({ message: "Assignments saved successfully!" });
+    } else {
+      res.status(400).json({ error: "No assignments provided." });
+    }
   } catch (err) {
-      console.error("Error saving assignments:", err); // Log the error if something fails
-      res.status(400).json({ error: "Error saving assignments: " + err });
+    console.error("Error saving assignments:", err); // Log the error if something fails
+    res.status(400).json({ error: "Error saving assignments: " + err });
   }
 });
-
 
 app.get('/getUsers', async (req, res) => {
   try {
@@ -130,14 +129,5 @@ app.get('/getStoredAssignments', async (req, res) => {
 });
 
 // Start the server
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-// const PORT = process.env.PORT || 5000; // Use the PORT environment variable or default to 10000
-// const HOST = '0.0.0.0'; // Bind to all IP addresses
-
-// app.listen(PORT, HOST, () => {
-//   console.log(`Server running on http://${HOST}:${PORT}`);
-// });
