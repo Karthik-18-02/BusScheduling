@@ -25,7 +25,7 @@ function fetchUsers() {
     });
 }
 
-// Add event listener to the "Show Current Users" button
+// Add event listener to the "Show Current Users"
 document.getElementById('showUsersButton').addEventListener('click', fetchUsers);
 
 // Modify the existing addUser function to refresh the user list after adding
